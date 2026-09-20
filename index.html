@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2F5BEA">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Rumbo Pro · Descubre qué estudiar</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F5FB;--surface:#FFFFFF;--ink:#14213D;--muted:#55627F;--line:#DCE3F1;
+  --brand:#2F5BEA;--brand-ink:#FFFFFF;--soft:#E6ECFD;--accent:#FFC43D;--good:#178A6B;--bad:#B3261E;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1424;--surface:#172037;--ink:#EAF0FF;--muted:#9BA8C8;--line:#2A3556;
+    --brand:#7B9CFF;--brand-ink:#0E1424;--soft:#20305A;--good:#4CC9A2;--bad:#FF8A80;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1424;--surface:#172037;--ink:#EAF0FF;--muted:#9BA8C8;--line:#2A3556;
+  --brand:#7B9CFF;--brand-ink:#0E1424;--soft:#20305A;--good:#4CC9A2;--bad:#FF8A80;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;min-height:100vh}
+#app{max-width:560px;margin:0 auto;padding:18px 20px calc(40px + env(safe-area-inset-bottom))}
+h1,h2,h3{font-family:var(--display);line-height:1.1;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(2.1rem,9vw,2.9rem);font-weight:800}
+h2{font-size:1.6rem;font-weight:800}
+h3{font-size:1.1rem;font-weight:600;line-height:1.25}
+p{margin:0}
+.muted{color:var(--muted)}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:1.25rem}
+.brand svg{width:30px;height:30px}
+.bar{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin-bottom:26px}
+.bar i{display:block;height:100%;background:var(--brand);border-radius:6px;transition:width .3s}
+.btn{appearance:none;border:0;font:inherit;font-weight:600;cursor:pointer;min-height:52px;padding:0 22px;border-radius:14px;background:var(--brand);color:var(--brand-ink);width:100%;font-size:1.02rem}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.small{min-height:42px;width:auto;font-size:.92rem;padding:0 16px}
+.btn:focus-visible,.chip:focus-visible,.sc:focus-visible,summary:focus-visible,.link:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.stack{display:grid;gap:12px}
+.hero{margin:6px 0 26px}
+.hero svg{width:100%;max-width:290px;display:block;margin:0 auto 22px}
+.hero h1{margin-bottom:14px}
+.hero p{font-size:1.06rem;color:var(--muted)}
+.hexline{stroke:var(--line);fill:none;stroke-width:2}
+.hexdot{fill:var(--surface);stroke:var(--brand);stroke-width:2}
+.hexdot.hot{fill:var(--accent);stroke:var(--accent)}
+.hexletter{font-family:var(--display);font-weight:800;font-size:15px;fill:var(--ink);text-anchor:middle;dominant-baseline:central}
+.note{font-size:.88rem;color:var(--muted);text-align:center;margin-top:16px}
+.install{margin-top:18px;padding:14px 16px;border:1.5px dashed var(--line);border-radius:14px;font-size:.92rem;color:var(--muted)}
+.install b{color:var(--ink)}
+.q{margin-bottom:26px}
+.q h3{margin-bottom:10px}
+.q .hint{font-size:.88rem;color:var(--muted);margin:-4px 0 10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{appearance:none;font:inherit;font-size:.95rem;cursor:pointer;padding:10px 15px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);min-height:44px}
+.chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--brand-ink);font-weight:600}
+.opt{display:block;width:100%;text-align:left;border-radius:14px;padding:14px 16px}
+.opt small{display:block;color:inherit;opacity:.75;font-size:.85rem}
+.qcount{font-size:.9rem;color:var(--muted);margin-bottom:10px}
+.qtext{font-family:var(--display);font-weight:600;font-size:clamp(1.4rem,6vw,1.75rem);line-height:1.2;margin-bottom:28px;min-height:5.4em}
+.qlead{color:var(--muted);font-size:.95rem;margin-bottom:8px}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.sc{appearance:none;font:inherit;font-weight:800;font-family:var(--display);font-size:1.35rem;cursor:pointer;height:64px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.sc[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.scl{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted);margin:8px 2px 26px}
+.nav{display:flex;gap:10px}
+.code{display:flex;gap:8px;margin:12px 0 14px}
+.code span{width:46px;height:46px;border-radius:12px;background:var(--accent);color:#14213D;font-family:var(--display);font-weight:800;font-size:1.4rem;display:grid;place-items:center}
+.radar{width:100%;display:block;margin:6px auto 6px;max-width:400px}
+.radar .g{fill:none;stroke:var(--line);stroke-width:1.2}
+.radar .ax{stroke:var(--line);stroke-width:1.2}
+.radar .poly{fill:var(--brand);fill-opacity:.25;stroke:var(--brand);stroke-width:2.5;stroke-linejoin:round;transform-origin:170px 150px;animation:grow .9s cubic-bezier(.2,.8,.2,1) both}
+.radar .pt{fill:var(--brand)}
+.radar text{font-family:var(--body);font-size:11.5px;fill:var(--muted);text-anchor:middle}
+.radar text.top3{fill:var(--ink);font-weight:600}
+@keyframes grow{from{transform:scale(.05);opacity:0}to{transform:scale(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){.radar .poly{animation:none}.bar i{transition:none}}
+.sec{margin-top:30px}
+.sec h2{margin-bottom:6px}
+.card{background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:16px;margin-top:12px}
+.card .row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.pct{font-family:var(--display);font-weight:800;font-size:1.5rem;color:var(--good);white-space:nowrap}
+.meter{height:6px;border-radius:6px;background:var(--line);margin:10px 0 12px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--good);border-radius:6px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.tag{font-size:.8rem;padding:4px 10px;border-radius:999px;background:var(--soft);color:var(--ink)}
+.card p.d{color:var(--muted);font-size:.95rem}
+details{margin-top:8px}
+summary{cursor:pointer;font-weight:600;font-size:.92rem;color:var(--brand);padding:6px 0;list-style:none}
+summary::-webkit-details-marker{display:none}
+details p{font-size:.92rem;padding:2px 0 4px}
+ul.steps{margin:10px 0 0;padding-left:20px;display:grid;gap:8px}
+.bars{display:grid;gap:8px;margin-top:10px}
+.brow{display:grid;grid-template-columns:110px 1fr 38px;align-items:center;gap:10px;font-size:.9rem}
+.brow .m{height:8px;background:var(--line);border-radius:8px;overflow:hidden}
+.brow .m i{display:block;height:100%;background:var(--brand);border-radius:8px}
+.brow b{text-align:right;font-family:var(--display)}
+.foot{font-size:.82rem;color:var(--muted);margin-top:26px;text-align:center}
+.link{background:none;border:0;font:inherit;color:var(--brand);text-decoration:underline;cursor:pointer;padding:6px}
+.inp{width:100%;min-height:56px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:1.1rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:0 16px;margin:4px 0 12px}
+.inp:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.err{color:var(--bad);font-size:.92rem;min-height:1.4em;margin:-4px 0 10px}
+.price{font-family:var(--display);font-weight:800;font-size:1.3rem}
+.sep{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:.88rem;margin:26px 0 18px}
+.sep::before,.sep::after{content:"";flex:1;height:1px;background:var(--line)}
+a.btn{display:flex;align-items:center;justify-content:center;text-decoration:none}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:12px;font-size:.92rem;z-index:9}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+"use strict";
+/* ---------- Datos ---------- */
+const AREAS={
+  R:{n:"Realista",d:"Aprendes haciendo: herramientas, máquinas, obras, campo."},
+  I:{n:"Investigador",d:"Te mueve entender cómo y por qué funcionan las cosas."},
+  A:{n:"Artístico",d:"Necesitas crear, diseñar y expresar ideas propias."},
+  S:{n:"Social",d:"Te importa ayudar, enseñar y acompañar a las personas."},
+  E:{n:"Emprendedor",d:"Te gusta liderar, convencer y hacer que las cosas pasen."},
+  C:{n:"Convencional",d:"Rindes con orden, precisión y procesos bien hechos."}
+};
+const ORDER=["R","I","A","S","E","C"];
+const QTXT={
+  R:["Armar, reparar o construir cosas con las manos","Trabajar al aire libre o con maquinaria y herramientas","Descubrir cómo funciona un motor, un aparato o una instalación","Cultivar plantas, cuidar animales o trabajar en el campo","Operar equipos técnicos o conducir vehículos especiales","Diagnosticar y arreglar fallas de aparatos o instalaciones"],
+  I:["Investigar por qué pasan las cosas","Resolver problemas de matemáticas o lógica","Hacer experimentos y analizar datos","Leer sobre ciencia o tecnología por gusto","Programar o descubrir cómo funciona un sistema","Buscar patrones en información complicada"],
+  A:["Dibujar, diseñar o crear algo original","Escribir, actuar, componer o producir contenido","Trabajar en un ambiente libre, sin reglas rígidas","Tomar fotos, grabar video o editarlos","Diseñar ropa, objetos o decorar espacios","Expresar mis ideas de formas creativas"],
+  S:["Ayudar a otras personas con sus problemas","Enseñar o explicar cosas a otros","Trabajar en equipo escuchando a la gente","Cuidar la salud o el bienestar de otras personas","Participar en voluntariados o causas sociales","Ayudar a resolver conflictos entre personas"],
+  E:["Liderar un proyecto o un equipo","Convencer y negociar con otros","Iniciar mi propio negocio","Tomar decisiones que implican riesgo","Competir por metas ambiciosas","Organizar eventos o promover ideas y productos"],
+  C:["Ordenar datos, archivos o cuentas","Seguir procedimientos claros y precisos","Trabajar con hojas de cálculo y presupuestos","Planear cada detalle antes de actuar","Revisar que todo esté correcto y sin errores","Llevar registros y control de inventarios"]
+};
+const SUBJ={mat:"Matemáticas",cie:"Ciencias",tec:"Tecnología",art:"Arte y diseño",com:"Lenguaje y comunicación",soc:"Ciencias sociales",neg:"Economía y negocios",sal:"Salud y cuerpo humano",aire:"Naturaleza y aire libre"};
+
+/* c = códigos, d = descripción, l = licenciatura, t = ruta técnica/corta, on = amigable con modalidad en línea,
+   s = materias afines, e = demanda laboral (1-3), p = suele continuar en posgrado, k = qué estudiarás */
+const CAREERS=[
+ {n:"Ingeniería Civil",c:"RI",d:"Diseñas y supervisas edificios, puentes, caminos y obras de agua.",l:"4–5 años",t:"Técnico en construcción · 2 años",on:0,s:["mat","tec","aire"],e:3,p:1,k:"Estructuras, materiales, topografía, hidráulica."},
+ {n:"Mecatrónica / Ing. Mecánica",c:"RI",d:"Combinas mecánica, electrónica y control para crear máquinas y robots.",l:"4–5 años",t:"Técnico en mecatrónica · 2 años",on:0,s:["mat","tec"],e:3,p:1,k:"Automatización, robótica, diseño de máquinas, sistemas de control."},
+ {n:"Electricidad y Electrónica",c:"RC",d:"Instalas, mantienes y reparas sistemas eléctricos y equipos electrónicos.",l:"4–5 años (Ing. Electrónica)",t:"Técnico electricista · 1–2 años",on:0,s:["tec","mat"],e:3,p:0,k:"Circuitos, instalaciones, energía, mantenimiento industrial."},
+ {n:"Agronomía",c:"RI",d:"Mejoras cultivos y producción de alimentos con ciencia y tecnología.",l:"4–5 años",t:"Técnico agropecuario · 2 años",on:0,s:["cie","aire"],e:2,p:1,k:"Suelos, riego, plagas, producción sustentable."},
+ {n:"Mantenimiento Aeronáutico",c:"RC",d:"Mantienes y certificas que las aeronaves sean seguras para volar.",l:"4–5 años (Ing. Aeronáutica)",t:"Técnico aeronáutico · 2–3 años",on:0,s:["tec","mat"],e:2,p:0,k:"Motores, aviónica, normas de seguridad, inspección."},
+ {n:"Ciencias del Deporte",c:"RS",d:"Entrenas personas, previenes lesiones y mejoras el rendimiento físico.",l:"4 años",t:"Técnico en acondicionamiento físico · 1–2 años",on:0,s:["sal","aire"],e:2,p:1,k:"Fisiología del ejercicio, entrenamiento, nutrición deportiva."},
+ {n:"Medicina Veterinaria",c:"IS",d:"Cuidas la salud de animales de compañía, de granja y de fauna silvestre.",l:"4–5 años",t:"Auxiliar veterinario · 1 año",on:0,s:["cie","sal","aire"],e:2,p:1,k:"Anatomía animal, clínica, farmacología, producción pecuaria."},
+ {n:"Gastronomía",c:"RA",d:"Creas platillos, diriges cocinas y conviertes la comida en negocio.",l:"4 años",t:"Técnico en cocina · 1–2 años",on:0,s:["art","neg"],e:2,p:0,k:"Técnicas culinarias, panadería, costos, administración de cocinas."},
+
+ {n:"Ingeniería en Software / Computación",c:"IC",d:"Diseñas y programas aplicaciones, sistemas y videojuegos.",l:"4–5 años",t:"Desarrollo de software (técnico o bootcamp) · 6 meses–2 años",on:1,s:["tec","mat"],e:3,p:1,k:"Programación, bases de datos, algoritmos, arquitectura de software."},
+ {n:"Ciencia de Datos",c:"IC",d:"Conviertes grandes cantidades de datos en decisiones e inteligencia artificial.",l:"4 años",t:"Analista de datos (cursos) · 6–12 meses",on:1,s:["mat","tec"],e:3,p:1,k:"Estadística, Python, aprendizaje automático, visualización."},
+ {n:"Ciberseguridad y Redes",c:"IC",d:"Proteges sistemas y datos frente a ataques y fallas.",l:"4 años",t:"Técnico en redes y seguridad · 1–2 años",on:1,s:["tec","mat"],e:3,p:1,k:"Redes, criptografía, análisis de vulnerabilidades, respuesta a incidentes."},
+ {n:"Medicina",c:"IS",d:"Diagnosticas y tratas enfermedades; es una carrera larga y muy demandante.",l:"6–7 años",t:"",on:0,s:["sal","cie"],e:3,p:1,k:"Anatomía, fisiología, patología, clínica, internado y servicio social."},
+ {n:"Biología / Biotecnología",c:"IR",d:"Estudias seres vivos y desarrollas soluciones para salud, alimentos y ambiente.",l:"4 años",t:"Técnico de laboratorio · 2 años",on:0,s:["cie","sal"],e:2,p:1,k:"Genética, microbiología, bioquímica, laboratorio."},
+ {n:"Matemáticas / Física",c:"IC",d:"Modelas el mundo con teoría y cálculo; base de ciencia, tecnología y finanzas.",l:"4–5 años",t:"",on:1,s:["mat","cie"],e:2,p:1,k:"Cálculo, álgebra, mecánica, modelado matemático."},
+ {n:"Ingeniería Química",c:"IR",d:"Transformas materias primas en productos: alimentos, medicinas, energía.",l:"4–5 años",t:"Técnico en procesos químicos · 2 años",on:0,s:["cie","mat"],e:3,p:1,k:"Procesos industriales, termodinámica, control de calidad."},
+ {n:"Ingeniería Ambiental",c:"IR",d:"Diseñas soluciones para agua, residuos, energía limpia y cuidado del entorno.",l:"4–5 años",t:"Técnico en gestión ambiental · 2 años",on:0,s:["cie","aire"],e:2,p:1,k:"Impacto ambiental, tratamiento de agua, energías renovables."},
+ {n:"Psicología",c:"IS",d:"Comprendes la conducta y acompañas a personas en su bienestar emocional.",l:"4–5 años",t:"",on:1,s:["soc","sal"],e:2,p:1,k:"Desarrollo humano, evaluación, terapia, investigación."},
+
+ {n:"Diseño Gráfico",c:"AE",d:"Creas identidad visual, publicidad, empaques y contenido para marcas.",l:"4 años",t:"Técnico en diseño gráfico · 1–2 años",on:1,s:["art","com"],e:2,p:0,k:"Tipografía, color, ilustración digital, branding."},
+ {n:"Diseño UX/UI",c:"AI",d:"Diseñas apps y sitios web fáciles de usar y agradables a la vista.",l:"4 años (Diseño digital)",t:"Cursos y certificaciones · 6–12 meses",on:1,s:["art","tec"],e:3,p:0,k:"Investigación de usuarios, prototipos, diseño de interfaces."},
+ {n:"Comunicación y Producción Audiovisual",c:"AE",d:"Produces video, podcast, cine y contenido para medios y redes.",l:"4 años",t:"Técnico en producción audiovisual · 2 años",on:0,s:["com","art"],e:2,p:0,k:"Guion, cámara, edición, producción, medios digitales."},
+ {n:"Arquitectura",c:"AR",d:"Diseñas espacios habitables combinando estética, técnica y funcionalidad.",l:"5 años",t:"Técnico en dibujo arquitectónico · 2 años",on:0,s:["art","mat","tec"],e:2,p:1,k:"Diseño arquitectónico, estructuras, urbanismo, modelado 3D."},
+ {n:"Animación y Videojuegos",c:"AI",d:"Das vida a personajes y mundos en 2D y 3D para juegos, cine y publicidad.",l:"4 años",t:"Curso de animación 3D · 1 año",on:1,s:["art","tec"],e:2,p:0,k:"Modelado 3D, animación, motores de juego, narrativa."},
+ {n:"Música y Artes Escénicas",c:"AS",d:"Te formas como intérprete, compositor, productor o docente artístico.",l:"4 años",t:"",on:0,s:["art"],e:1,p:1,k:"Interpretación, composición, teoría, producción."},
+ {n:"Periodismo y Letras",c:"AS",d:"Investigas, escribes y cuentas historias para medios, editoriales y organizaciones.",l:"4 años",t:"",on:1,s:["com","soc"],e:1,p:1,k:"Redacción, investigación, edición, medios digitales."},
+ {n:"Diseño de Modas / Industrial",c:"AR",d:"Diseñas ropa, calzado, muebles o productos y los llevas a producción.",l:"4 años",t:"Técnico en patronaje y confección · 1–2 años",on:0,s:["art"],e:2,p:0,k:"Patronaje, materiales, prototipos, producción."},
+
+ {n:"Enfermería",c:"SI",d:"Cuidas pacientes y trabajas con médicos en hospitales, clínicas y comunidad.",l:"4 años",t:"Técnico en enfermería · 2–3 años",on:0,s:["sal","cie"],e:3,p:1,k:"Cuidados clínicos, farmacología, salud pública."},
+ {n:"Educación / Pedagogía",c:"SA",d:"Enseñas y diseñas experiencias de aprendizaje para niños, jóvenes o adultos.",l:"4 años",t:"Técnico en educación infantil · 2 años",on:1,s:["soc","com"],e:2,p:1,k:"Didáctica, psicología educativa, evaluación, tecnología educativa."},
+ {n:"Trabajo Social",c:"SE",d:"Apoyas a familias y comunidades a acceder a derechos y programas.",l:"4 años",t:"",on:1,s:["soc"],e:2,p:1,k:"Intervención comunitaria, políticas sociales, investigación."},
+ {n:"Nutrición",c:"SI",d:"Mejoras la salud de las personas a través de la alimentación.",l:"4 años",t:"Técnico en nutrición · 2 años",on:0,s:["sal","cie"],e:2,p:1,k:"Bioquímica, dietética, nutrición clínica y deportiva."},
+ {n:"Fisioterapia",c:"SR",d:"Rehabilitas lesiones y ayudas a recuperar movimiento y calidad de vida.",l:"4 años",t:"Técnico en rehabilitación · 2 años",on:0,s:["sal"],e:3,p:1,k:"Anatomía, biomecánica, terapia manual, ejercicio terapéutico."},
+ {n:"Odontología",c:"SR",d:"Previenes y tratas problemas de dientes y boca, con mucha precisión manual.",l:"4–5 años",t:"Asistente dental · 1 año",on:0,s:["sal","cie"],e:3,p:1,k:"Anatomía oral, materiales dentales, clínica, cirugía."},
+
+ {n:"Administración de Empresas",c:"EC",d:"Diriges equipos, recursos y proyectos para que una organización funcione y crezca.",l:"4 años",t:"Técnico en administración · 2 años",on:1,s:["neg","soc"],e:3,p:1,k:"Finanzas, estrategia, recursos humanos, operaciones."},
+ {n:"Mercadotecnia y Publicidad",c:"EA",d:"Estudias al público y creas estrategias para dar a conocer productos y marcas.",l:"4 años",t:"Marketing digital (cursos) · 6–12 meses",on:1,s:["neg","com","art"],e:3,p:0,k:"Investigación de mercado, publicidad, redes, analítica."},
+ {n:"Derecho",c:"ES",d:"Defiendes derechos, asesoras y resuelves conflictos dentro de la ley.",l:"4–5 años",t:"",on:1,s:["soc","com"],e:3,p:1,k:"Derecho civil, penal, laboral, argumentación y litigio."},
+ {n:"Negocios Internacionales",c:"EC",d:"Conectas empresas con mercados de otros países: comercio, logística e idiomas.",l:"4 años",t:"",on:1,s:["neg","com"],e:2,p:1,k:"Comercio exterior, finanzas internacionales, idiomas."},
+ {n:"Emprendimiento e Innovación",c:"EA",d:"Aprendes a crear, validar y escalar tu propio negocio.",l:"4 años",t:"Programas cortos de emprendimiento · 6 meses",on:1,s:["neg","tec"],e:2,p:0,k:"Modelos de negocio, ventas, finanzas para startups."},
+ {n:"Turismo y Hospitalidad",c:"ES",d:"Gestionas hoteles, viajes, eventos y experiencias para visitantes.",l:"4 años",t:"Técnico en turismo · 2 años",on:0,s:["com","neg"],e:2,p:0,k:"Operación hotelera, eventos, patrimonio, idiomas."},
+ {n:"Ciencias Políticas",c:"ES",d:"Analizas poder, gobierno y políticas públicas para influir en decisiones colectivas.",l:"4 años",t:"",on:1,s:["soc","com"],e:1,p:1,k:"Teoría política, políticas públicas, análisis electoral."},
+
+ {n:"Contaduría Pública",c:"CE",d:"Llevas las cuentas, impuestos y auditorías de personas y empresas.",l:"4 años",t:"Técnico contable · 2 años",on:1,s:["neg","mat"],e:3,p:1,k:"Contabilidad, fiscal, auditoría, costos."},
+ {n:"Finanzas y Actuaría",c:"CI",d:"Evalúas riesgos e inversiones con matemáticas y estadística.",l:"4–5 años",t:"",on:1,s:["mat","neg"],e:3,p:1,k:"Probabilidad, matemáticas financieras, seguros, inversiones."},
+ {n:"Logística y Cadena de Suministro",c:"CE",d:"Organizas cómo llegan los productos, a tiempo y al menor costo.",l:"4 años",t:"Técnico en logística · 2 años",on:1,s:["neg"],e:3,p:0,k:"Inventarios, transporte, compras, comercio exterior."},
+ {n:"Ingeniería Industrial",c:"CR",d:"Mejoras procesos de fábricas y servicios para producir más y mejor.",l:"4–5 años",t:"Técnico en productividad · 2 años",on:0,s:["mat","tec","neg"],e:3,p:1,k:"Calidad, procesos, ergonomía, cadena de suministro."},
+ {n:"Gestión Administrativa",c:"CS",d:"Organizas la operación diaria de oficinas, clínicas o empresas.",l:"4 años (Administración)",t:"Técnico en gestión administrativa · 1–2 años",on:1,s:["neg","com"],e:2,p:0,k:"Archivo, atención a clientes, ofimática, procesos."}
+];
+
+/* ---------- Utilidades ---------- */
+const $=s=>document.querySelector(s);
+const app=$("#app");
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function load(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
+function buildQs(len){
+  const n=len==="completo"?6:3,qs=[];
+  for(let i=0;i<n;i++)for(const a of ORDER)qs.push({a,t:QTXT[a][i]});
+  return qs;
+}
+function scores(qs,ans){
+  const s={},n={};ORDER.forEach(a=>{s[a]=0;n[a]=0});
+  qs.forEach((q,i)=>{s[q.a]+=ans[i];n[q.a]++});
+  const p={};ORDER.forEach(a=>{p[a]=Math.round((s[a]-n[a])/(n[a]*4)*100)});
+  return p;
+}
+function rank(p,prof){
+  return CAREERS.map(c=>{
+    let sc=(p[c.c[0]]*2+p[c.c[1]])/3;
+    const m=c.s.filter(x=>prof.subj.includes(x)).length;
+    sc+=Math.min(m,2)*6;
+    if(prof.time==="corto")sc+=c.t?8:-12;
+    if(prof.time==="largo"&&c.p)sc+=4;
+    if(prof.mode==="online")sc+=c.on?5:-4;
+    if(prof.pri==="empleo")sc+=c.e*3;
+    if(prof.pri==="rapido")sc+=c.t?8:0;
+    return Object.assign({},c,{sc:Math.max(1,Math.min(99,Math.round(sc)))});
+  }).sort((a,b)=>b.sc-a.sc);
+}
+function toast(msg){
+  const t=document.createElement("div");t.className="toast";t.textContent=msg;t.setAttribute("role","status");
+  document.body.appendChild(t);setTimeout(()=>t.remove(),2200);
+}
+
+/* ---------- Estado ---------- */
+const S={screen:"welcome",prof:{stage:null,time:null,mode:null,subj:[],pri:null,len:"breve"},qs:[],ans:[],i:0,more:false};
+let deferredPrompt=null;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;if(S.screen==="welcome")render()});
+
+/* ---------- Vistas ---------- */
+const LOGO=`<svg viewBox="0 0 32 32" aria-hidden="true"><polygon points="16,2 28,9 28,23 16,30 4,23 4,9" fill="none" stroke="currentColor" stroke-width="2.4"/><polygon points="16,9 20,16 16,23 12,16" fill="#FFC43D"/></svg>`;
+function header(){return `<div class="top"><div class="brand">${LOGO}Rumbo</div></div>`}
+
+function hexHero(){
+  const cx=145,cy=110,r=84,pts=ORDER.map((_,i)=>{const a=(-90+60*i)*Math.PI/180;return [cx+r*Math.cos(a),cy+r*Math.sin(a)]});
+  const line=pts.map(p=>p.join(",")).join(" ");
+  const dots=pts.map((p,i)=>`<circle class="hexdot${i===1?" hot":""}" cx="${p[0]}" cy="${p[1]}" r="20"/><text class="hexletter" x="${p[0]}" y="${p[1]}">${ORDER[i]}</text>`).join("");
+  const spokes=pts.map(p=>`<line class="hexline" x1="${cx}" y1="${cy}" x2="${p[0]}" y2="${p[1]}" stroke-dasharray="3 5"/>`).join("");
+  return `<svg viewBox="0 0 290 220" role="img" aria-label="Hexágono con las seis áreas vocacionales: Realista, Investigador, Artístico, Social, Emprendedor y Convencional"><polygon class="hexline" points="${line}"/>${spokes}${dots}</svg>`;
+}
+
+function welcome(){
+  const last=load("rumbo:last");
+  const standalone=window.matchMedia&&window.matchMedia("(display-mode: standalone)").matches;
+  const inst=standalone?"":deferredPrompt
+    ?`<button class="btn ghost" data-act="install" style="margin-top:12px">Instalar en mi celular</button>`
+    :`<div class="install"><b>Para instalarla en Android:</b> abre esta página en Chrome, toca el menú <b>⋮</b> y elige <b>Instalar app</b> o <b>Agregar a la pantalla de inicio</b>.</div>`;
+  return `${header()}
+  <div class="hero">${hexHero()}
+    <h1>Descubre qué estudiar según cómo eres</h1>
+    <p>Responde unas preguntas rápidas sobre tu situación y un test vocacional profesional. Te mostramos las carreras y programas que más van contigo.</p>
+  </div>
+  <div class="stack">
+    <button class="btn" data-act="start">Empezar</button>
+    ${last?`<button class="btn ghost" data-act="last">Ver mi último resultado</button>`:""}
+  </div>
+  ${inst}
+  <p class="note">Acceso activo: te quedan ${daysLeft()} día${daysLeft()===1?"":"s"}. Tus respuestas se quedan en tu teléfono.</p>`;
+}
+
+function opt(group,val,label,sub){
+  const on=S.prof[group]===val;
+  return `<button class="chip opt" aria-pressed="${on}" data-act="set" data-g="${group}" data-v="${val}">${label}${sub?`<small>${sub}</small>`:""}</button>`;
+}
+function profile(){
+  const p=S.prof,ok=p.time&&p.mode&&p.pri;
+  const subj=Object.keys(SUBJ).map(k=>`<button class="chip" aria-pressed="${p.subj.includes(k)}" data-act="subj" data-v="${k}">${SUBJ[k]}</button>`).join("");
+  return `${header()}
+  <h2 style="margin-bottom:22px">Cuéntanos de ti</h2>
+  <div class="q"><h3>¿En qué momento estás?</h3><div class="stack">
+    ${opt("stage","prepa","Estoy en secundaria o prepa")}
+    ${opt("stage","egreso","Ya terminé la prepa")}
+    ${opt("stage","cambio","Ya trabajo y quiero cambiar de rumbo")}
+    ${opt("stage","otra","Ya tengo carrera y busco otra opción")}
+  </div></div>
+  <div class="q"><h3>¿Cuánto tiempo puedes dedicar a estudiar?</h3><div class="stack">
+    ${opt("time","corto","Poco","Cursos o técnico, hasta 2 años")}
+    ${opt("time","medio","Una carrera completa","Licenciatura o ingeniería, 4–5 años")}
+    ${opt("time","largo","Lo que sea necesario","Incluye posgrado o especialidad")}
+  </div></div>
+  <div class="q"><h3>¿Cómo prefieres estudiar?</h3><div class="stack">
+    ${opt("mode","presencial","Presencial")}
+    ${opt("mode","online","En línea o a distancia")}
+    ${opt("mode","cualquiera","Me da igual")}
+  </div></div>
+  <div class="q"><h3>¿Qué te gustó más en la escuela?</h3><p class="hint">Elige hasta 3 (opcional).</p><div class="chips">${subj}</div></div>
+  <div class="q"><h3>¿Qué pesa más al decidir?</h3><div class="stack">
+    ${opt("pri","pasion","Que me apasione")}
+    ${opt("pri","empleo","Que tenga empleo y buen sueldo")}
+    ${opt("pri","rapido","Empezar a trabajar pronto")}
+  </div></div>
+  <div class="q"><h3>¿Qué test quieres hacer?</h3><div class="stack">
+    ${opt("len","breve","Test breve","18 preguntas · unos 3 minutos")}
+    ${opt("len","completo","Test completo","36 preguntas · unos 7 minutos, más preciso")}
+  </div></div>
+  <div class="nav"><button class="btn ghost" style="width:auto" data-act="home">Atrás</button><button class="btn" data-act="begin" ${ok?"":"disabled"}>Comenzar test</button></div>`;
+}
+
+function test(){
+  const q=S.qs[S.i],cur=S.ans[S.i],pct=Math.round(S.i/S.qs.length*100);
+  const sc=[1,2,3,4,5].map(n=>`<button class="sc" aria-pressed="${cur===n}" aria-label="${n} de 5" data-act="ans" data-v="${n}">${n}</button>`).join("");
+  return `${header()}
+  <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${S.qs.length}" aria-valuenow="${S.i}"><i style="width:${pct}%"></i></div>
+  <div class="qcount">Pregunta ${S.i+1} de ${S.qs.length}</div>
+  <div class="qlead">¿Qué tanto te gustaría…</div>
+  <div class="qtext">${q.t}?</div>
+  <div class="scale" role="group" aria-label="Qué tanto te gustaría">${sc}</div>
+  <div class="scl"><span>Nada</span><span>Muchísimo</span></div>
+  <div class="nav"><button class="btn ghost" data-act="prev">${S.i===0?"Salir":"Anterior"}</button></div>`;
+}
+
+function radar(p,top){
+  const cx=170,cy=150,R=95;
+  const pos=(i,v)=>{const a=(-90+60*i)*Math.PI/180;return [cx+R*v*Math.cos(a),cy+R*v*Math.sin(a)]};
+  const ring=v=>ORDER.map((_,i)=>pos(i,v).join(",")).join(" ");
+  const axes=ORDER.map((_,i)=>{const e=pos(i,1);return `<line class="ax" x1="${cx}" y1="${cy}" x2="${e[0]}" y2="${e[1]}"/>`}).join("");
+  const poly=ORDER.map((a,i)=>pos(i,Math.max(.06,p[a]/100)).join(",")).join(" ");
+  const pts=ORDER.map((a,i)=>{const q=pos(i,Math.max(.06,p[a]/100));return `<circle class="pt" cx="${q[0]}" cy="${q[1]}" r="3.5"/>`}).join("");
+  const labs=ORDER.map((a,i)=>{const q=pos(i,1.27);return `<text class="${top.includes(a)?"top3":""}" x="${q[0]}" y="${q[1]+4}">${AREAS[a].n}</text>`}).join("");
+  return `<svg class="radar" viewBox="0 0 340 300" role="img" aria-label="Gráfica de tu perfil por área">
+    <polygon class="g" points="${ring(1)}"/><polygon class="g" points="${ring(.66)}"/><polygon class="g" points="${ring(.33)}"/>${axes}
+    <polygon class="poly" points="${poly}"/>${pts}${labs}</svg>`;
+}
+
+function careerCard(c){
+  return `<div class="card">
+    <div class="row"><h3>${c.n}</h3><div class="pct" aria-label="Afinidad ${c.sc} por ciento">${c.sc}%</div></div>
+    <div class="meter"><i style="width:${c.sc}%"></i></div>
+    <p class="d">${c.d}</p>
+    <div class="tags"><span class="tag">Licenciatura: ${c.l}</span>${c.t?`<span class="tag">${c.t}</span>`:""}${c.on?`<span class="tag">Opción en línea</span>`:""}</div>
+    <details><summary>Qué estudiarías</summary><p>${c.k}</p></details>
+  </div>`;
+}
+
+function result(){
+  const p=scores(S.qs,S.ans),order=ORDER.slice().sort((a,b)=>p[b]-p[a]),top=order.slice(0,3);
+  const list=rank(p,S.prof),shown=S.more?list.slice(0,12):list.slice(0,6);
+  const code=top.map(a=>`<span title="${AREAS[a].n}">${a}</span>`).join("");
+  const bars=order.map(a=>`<div class="brow"><span>${AREAS[a].n}</span><div class="m"><i style="width:${p[a]}%"></i></div><b>${p[a]}</b></div>`).join("");
+  const short=list.filter(c=>c.t).slice(0,3);
+  const steps=[];
+  steps.push(`Revisa el plan de estudios de tus 3 primeras opciones en 2 o 3 instituciones (públicas, tecnológicos y privadas) y compara costos y duración.`);
+  if(S.prof.time==="corto"||S.prof.pri==="rapido")steps.push(`Como buscas empezar pronto, explora primero las rutas técnicas o cortas: ${short.map(c=>c.t.split(" · ")[0]).join(", ")}.`);
+  if(S.prof.mode==="online")steps.push(`Si estudias en línea, confirma que el programa tenga reconocimiento oficial y pregunta por prácticas o titulación.`);
+  if(S.prof.stage==="cambio"||S.prof.stage==="otra")steps.push(`Pregunta por revalidación de materias y programas de titulación o certificación acelerada; tu experiencia previa puede ahorrarte tiempo.`);
+  steps.push(`Habla con alguien que ya trabaje en tu opción favorita y prueba un curso gratuito de 1 o 2 semanas antes de decidir.`);
+  if(S.prof.len==="breve")steps.push(`Cuando tengas tiempo, haz el test completo para afinar tus resultados.`);
+  return `${header()}
+  <p class="muted">Tu perfil vocacional</p>
+  <div class="code" aria-label="Código ${top.join(" ")}">${code}</div>
+  <h2>${top.map(a=>AREAS[a].n).join(" · ")}</h2>
+  <p class="muted" style="margin-top:8px">${AREAS[top[0]].d} ${AREAS[top[1]].d}</p>
+  ${radar(p,top)}
+  <div class="bars">${bars}</div>
+
+  <div class="sec"><h2>Ofertas para ti</h2>
+  <p class="muted">Ordenadas según tu perfil, tus materias favoritas y tus preferencias.</p>
+  ${shown.map(careerCard).join("")}
+  ${S.more?"":`<button class="btn ghost" style="margin-top:14px" data-act="more">Ver más opciones</button>`}</div>
+
+  <div class="sec"><h2>Tus siguientes pasos</h2><ul class="steps">${steps.map(s=>`<li>${s}</li>`).join("")}</ul></div>
+
+  <div class="stack" style="margin-top:28px">
+    <button class="btn" data-act="share">Compartir mi resultado</button>
+    <button class="btn ghost" data-act="restart">Repetir el test</button>
+  </div>
+  <p class="foot">Rumbo es una guía de orientación basada en el modelo de intereses de Holland (RIASEC). No sustituye la asesoría de un orientador profesional.</p>`;
+}
+
+/* ---------- Acceso por código ---------- */
+const CONFIG={
+  ACCESS_DAYS:30,          // días de acceso que da cada código
+  PRICE:"",                // ej. "$99 MXN"
+  PAY_URL:"",              // link de pago (Mercado Pago, Stripe, PayPal, etc.)
+  WHATSAPP:"",             // tu número con lada, solo dígitos. ej. "5216181234567"
+  HASHES:["55e8f4b91570fdae0292a95eff61a84cafb254779eeaaafcb1743f9e582a0fcb", "346f9850d52bfc26ad676d301cd8d3a9678dbcabd4e4c1c1e97f6c0a799fb746", "e9d594ea2ca1222672fbf1106bc57d82152a41cc0f92c306d80f8b2b6df6cf18", "b914759b52e99e04ff58ea4835f297fbb2c3d10975ae622404bcffd971da1d55", "ce755b67497ce58dace5718c85e8ada0f83577c4525c26b542c6956a70f69848", "c12d39d6b1e9f701f3a9874a419948769d3ec26fc0a96f26c3aa81a9d73c0b1d", "3b30aa34f07df873d8dedc58a0e7d88216a1eed173f47e1ebfc64c1d44dab5fc", "72f9ecc992f28c4b789fb81f810d063c7fff46e22c63d62d69738047a9c9d6fc", "84cdd0296e8bd37c253965b64a5faee66e0f192865c0bbbd818e7fd71ba7b99f", "df7a661e98ce3e3ac21d972905b3dd2b27aad5100adc81d09cd1f6f04c968e6f", "4c9656ad07c254a540ce5a00d900555ff4c1e6aba7fab53ecd2e68aab929e0da", "7bc7edb1a4b02918e43070d95067a98db3d33ec6af0ba190726000b92f538367", "f79a46d0adb223c2185dd0ee75403bfa19a68409d1a008aeb326e653d5139b4e", "0420045e6e9d43ad181a14d4e2054bcbae3d594350bbb08c36b67f83e09dea08", "599b51a4fa990741954b9693b9868b71b51063f0e899670d54bb428f1cfb90d2", "e926d43d5a61c7ce075ead9695d97b7c555670c69db87629c514f9cdb2753bd3", "e24c699f7df38767eddb18949c2cee6f491fc31fecf90639a977c056e6fb7bf3", "115f0bbd2c5623de339a126bfa4c93c0ae447811380561fd4a26fb406c5ef753", "5bcf59a98a939302d6e94277dad73b8985c555acea9de141cfb8997763ba69d9", "524d2b2394cd86c0193dd19fc13dbabe418bec374403c4b3667dc5d005f4481f", "e885c14aed51c696256ef77e9195f01cbb5439a9c9fd7e56aa48bea443a1a66a", "7decb3980a1f3dfb9ab7601e81fefc149b0cf3076387544ea73281be6cb25692", "33ffe88e6dd5fa89f12249f9fb9743a38cddfd764bc407d6332d695c6a666935", "85e0dd435f7e92affc8b2f34f4889127782be7e31df97cc46689406b0e4ab19e", "03473db3fb5fd164b9bd8236a9cee0e001a9b07809135ef48d93a94fbee64fb8", "8f2e6f9fdf9339a3beba9add184903ced68ca9474c1161ffccf4585abd33e83a", "9a01540c40a4752f4344d2deca5746b9312a3b38d780f3dad4a9b35773faf102", "1cb00ec548943489548945f1fe6b30ec2e8f9f2a25cec0a78a20c9e8b5420140", "fc89564f3a6d49b95fd977e458b200f239ccecd80a5e3cd61d2aa668df9a09b5", "2840d6607278dfd3613d03b3df6ccc0f7d92be23db7337abd3b1d0796824d95b"]
+};
+async function sha256(s){
+  const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,"0")).join("");
+}
+function access(){
+  const a=load("rumbo:access");
+  if(!a||!a.h||a.exp<=Date.now()||!CONFIG.HASHES.includes(a.h))return null;
+  return a;
+}
+function daysLeft(){const a=access();return a?Math.max(1,Math.ceil((a.exp-Date.now())/864e5)):0}
+function gate(){
+  const buy=CONFIG.PAY_URL?`<a class="btn" href="${CONFIG.PAY_URL}" target="_blank" rel="noopener">Comprar mi código${CONFIG.PRICE?" · "+CONFIG.PRICE:""}</a>`:"";
+  const wa=CONFIG.WHATSAPP?`<a class="btn ghost" style="margin-top:12px" href="https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent("Hola, quiero mi código de acceso a Rumbo")}" target="_blank" rel="noopener">Pedir mi código por WhatsApp</a>`:"";
+  const none=(!buy&&!wa)?`<p class="muted">Pide tu código a quien te compartió la app.</p>`:"";
+  return `${header()}
+  <div class="hero">${hexHero()}
+    <h1>Desbloquea Rumbo</h1>
+    <p>Test vocacional profesional y tus carreras recomendadas. Con tu código tienes acceso por ${CONFIG.ACCESS_DAYS} días.</p>
+  </div>
+  <label for="code"><h3>Tengo un código</h3></label>
+  <input id="code" class="inp" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="RUMBO-XXXX-XXXX-XXXX">
+  <div class="err" id="err" role="alert"></div>
+  <button class="btn" data-act="unlock">Activar acceso</button>
+  ${(buy||wa||none)?`<div class="sep">¿Aún no tienes código?</div>${buy}${wa}${none}`:""}
+  <p class="note">Tu acceso se guarda en este teléfono.</p>`;
+}
+async function unlock(){
+  const inp=$("#code"),err=$("#err");if(!inp)return;
+  const norm=inp.value.toUpperCase().replace(/[^A-Z0-9]/g,"");
+  if(norm.length<17){err.textContent="Escribe el código completo, con el formato RUMBO-XXXX-XXXX-XXXX.";return}
+  if(!(window.crypto&&crypto.subtle)){err.textContent="Abre la app desde un enlace https para activar el código.";return}
+  const hh=await sha256(norm);
+  if(CONFIG.HASHES.includes(hh)){
+    const prev=load("rumbo:access");
+    const exp=(prev&&prev.h===hh&&prev.exp>Date.now())?prev.exp:Date.now()+CONFIG.ACCESS_DAYS*864e5;
+    save("rumbo:access",{h:hh,exp});
+    S.screen="welcome";render();
+  }else{
+    err.textContent="Ese código no es válido. Revisa que esté bien escrito.";
+  }
+}
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target&&e.target.id==="code")unlock()});
+
+/* ---------- Render y eventos ---------- */
+function render(){
+  if(S.screen!=="gate"&&!access()){S.screen="gate"}
+  const v={gate,welcome,profile,test,result}[S.screen];
+  app.innerHTML=v();
+  window.scrollTo(0,0);
+}
+function finish(){
+  save("rumbo:last",{prof:S.prof,ans:S.ans,len:S.prof.len});
+  S.screen="result";S.more=false;render();
+}
+app.addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]");if(!b)return;
+  const act=b.dataset.act,v=b.dataset.v,g=b.dataset.g;
+  if(act==="unlock"){unlock()}
+  else if(act==="start"){S.screen="profile";render()}
+  else if(act==="home"){S.screen="welcome";render()}
+  else if(act==="set"){S.prof[g]=v;const y=window.scrollY;render();window.scrollTo(0,y)}
+  else if(act==="subj"){
+    const a=S.prof.subj,i=a.indexOf(v);
+    if(i>=0)a.splice(i,1);else if(a.length<3)a.push(v);else toast("Elige máximo 3 materias");
+    const y=window.scrollY;render();window.scrollTo(0,y);
+  }
+  else if(act==="begin"){S.qs=buildQs(S.prof.len);S.ans=[];S.i=0;S.screen="test";render()}
+  else if(act==="ans"){
+    S.ans[S.i]=+v;
+    b.parentElement.querySelectorAll(".sc").forEach(x=>x.setAttribute("aria-pressed",x===b));
+    setTimeout(()=>{if(S.i<S.qs.length-1){S.i++;render()}else finish()},180);
+  }
+  else if(act==="prev"){if(S.i===0){S.screen="profile"}else S.i--;render()}
+  else if(act==="more"){S.more=true;const y=window.scrollY;render();window.scrollTo(0,y)}
+  else if(act==="restart"){S.screen="profile";render()}
+  else if(act==="last"){
+    const l=load("rumbo:last");if(!l)return;
+    S.prof=Object.assign({stage:null,time:null,mode:null,subj:[],pri:null,len:"breve"},l.prof);
+    S.qs=buildQs(l.len||S.prof.len);S.ans=l.ans;S.screen="result";S.more=false;render();
+  }
+  else if(act==="install"&&deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null;render()})}
+  else if(act==="share"){
+    const p=scores(S.qs,S.ans),top=ORDER.slice().sort((a,b)=>p[b]-p[a]).slice(0,3);
+    const cs=rank(p,S.prof).slice(0,5).map(c=>`• ${c.n} (${c.sc}%)`).join("\n");
+    const txt=`Mi perfil vocacional en Rumbo: ${top.map(a=>AREAS[a].n).join(" · ")}\n\nCarreras con más afinidad:\n${cs}`;
+    if(navigator.share){navigator.share({title:"Mi resultado en Rumbo",text:txt}).catch(()=>{})}
+    else if(navigator.clipboard){navigator.clipboard.writeText(txt).then(()=>toast("Resultado copiado"),()=>toast("No se pudo copiar"))}
+    else toast("Tu navegador no permite compartir");
+  }
+});
+if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{})})}
+render();
+</script>
+</body>
+</html>
